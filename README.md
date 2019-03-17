@@ -1,5 +1,7 @@
 # slide-shower
 
+Inspired by [Ross Kaffenberger's repo](https://github.com/rossta/vue-pdfjs-demo)
+
 ## Project setup
 ```
 npm install
