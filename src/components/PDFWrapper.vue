@@ -2,16 +2,20 @@
     <div class='pdf-viewer' v-if="showPdf">
         <header class='pdf-header'>
             <button @click="slideChange(-1)">
-                Previous
+                < Previous 
             </button>
             <span>
-                Page {{ currentSlideNum }} of {{ numPages }}
+                Page <input disabled class='input-box' input='number' v-model="currentSlideNum" /> of <b>{{ numPages }}</b>
             </span>
             <button @click="slideChange(1)">
                 Next >
             </button>
         </header>
-        <pdf-page v-for="page in pages" :page="page" :key="page.pageNumber" :scale="1.0"></pdf-page>
+        <pdf-page v-for="page in loadedPages" :page="page" :key="page.pageNumber" :initial-scale="1.75"></pdf-page>
+        <footer>
+            <button @click="zoom(-.25)">-</button>
+            <button @click="zoom(.25)">+</button>
+        </footer>
     </div>
 </template>
 
@@ -23,19 +27,32 @@ import { CHANGE_SLIDE } from '@/store/actions.type';
 
 export default {
     name: 'pdf-wrapper',
+    data() { 
+        return {
+            tempNum: this.currentSlideNum
+        }
+    },
     computed: {
         ...mapState({
-            pages: state => state.SlideModule.pdfPages,
             showPdf: state => state.SlideModule.slideStatus == 2,
             numPages: state => state.SlideModule.numPages,
-            currentSlideNum: state => (state.SlideModule.currentSlideIndex + 1),
+            currentSlideNum: state => state.SlideModule.currentSlideIndex + 1
         }),
-
+        ...mapGetters([
+            'loadedPages'
+        ])
     },
     components: {
         pdfPage
     },
     methods: {
+        textChange(ev) {
+            console.log(ev)
+            // let changeVal = ev.value
+        },
+        /**
+         * Dispatch the slide change action
+         */
         slideChange(changeVal) {
             this.$store.dispatch(CHANGE_SLIDE, changeVal);
         },
@@ -57,6 +74,10 @@ export default {
             if (changeVal) {
                 this.slideChange(changeVal)                
             }
+        },
+        zoom(changeVal) {
+            console.log(changeVal)
+            this.$root.$emit('zoom-change', changeVal);
         }
     },
     created() {
@@ -81,6 +102,13 @@ export default {
     text-align: center;
     color: #FFF;
     width: 100%;
+}
+
+.input-box {
+    font-weight: 600;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 25px;
+    text-align: center;
 }
 
 </style>

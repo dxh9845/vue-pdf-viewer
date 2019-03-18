@@ -11,7 +11,7 @@ export default {
       type: Object,
       required: true
     },
-    scale: {
+    initialScale: {
       type: Number,
       required: true
     }
@@ -19,20 +19,20 @@ export default {
 
   data() {
     return {
+      scale: this.initialScale,
       viewport: null,
       renderTask: null,
       rendered: false,
     }
   },
 
-
   computed: {
     actualSizeViewport() {
-      return this.viewport.clone({scale: this.scale});
+      return this.viewport.clone({scale: this.scale });
     },
 
     canvasStyle() {
-      const {width: actualSizeWidth, height: actualSizeHeight} = this.actualSizeViewport;
+      const { width: actualSizeWidth, height: actualSizeHeight } = this.actualSizeViewport;
       const pixelRatio = window.devicePixelRatio || 1;
       const [pixelWidth, pixelHeight] = [actualSizeWidth, actualSizeHeight].map(dim => Math.ceil(dim / pixelRatio));
       return `width: ${pixelWidth}px; height: ${pixelHeight}px;`
@@ -81,12 +81,21 @@ export default {
       // https://mozilla.github.io/pdf.js/api/draft/RenderTask.html
       if (this.renderTask) this.renderTask.cancel();
     },
+
+    async zoomChange(changeVal) {
+      // Set the zoom level based on the change value passed
+      this.scale += changeVal
+      // Rerender the page
+      await this.renderPage();
+    }
   },
 
   created() {
     // PDFPageProxy#getViewport
     // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
     this.viewport = this.page.getViewport(this.scale);
+
+    this.$root.$on('zoom-change', this.zoomChange)
   },
 
   async mounted() {
