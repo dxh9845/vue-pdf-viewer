@@ -1,28 +1,25 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <slide-container variant='dark' style='min-height: 50vh;'></slide-container>
+    <!-- <PDFData url='http://www.africau.edu/images/default/sample.pdf'></PDFData> -->
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import SlideContainer from '@/components/SlideContainer.vue';
+// import PDFData from '@/components/PDFData.vue';
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    // PDFData
+    SlideContainer
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 </style>

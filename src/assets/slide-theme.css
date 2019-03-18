@@ -1,0 +1,23 @@
+.dark {
+    background-color: #212121;
+    color: #FFF;
+}
+
+.dark .upload-button, .high-contrast .upload-button {
+    border: 2px solid #FFF;
+}
+
+.light {
+    background-color: #ECECEC;
+    color: #000;
+}
+
+.light .upload-button {
+    border: 2px solid #000;
+}
+
+.high-contrast {
+    background-color: #000;
+    color: #FFF;
+}
+

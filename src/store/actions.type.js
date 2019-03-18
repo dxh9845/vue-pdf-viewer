@@ -1,0 +1,3 @@
+export const UPLOAD_FILE = 'UPLOAD_FILE';
+export const CHANGE_SLIDE = 'CHANGE_SLIDE';
+export const RETRIEVE_PAGES = 'RETRIEVE_PAGES';
