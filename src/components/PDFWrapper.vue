@@ -11,8 +11,8 @@
                 Next >
             </button>
         </header>
-        <pdf-page v-for="page in loadedPages" :page="page" :key="page.pageNumber" :initial-scale="1.75"></pdf-page>
-        <footer>
+        <pdf-page v-for="page in loadedPages" :page="page" :key="page.pageNumber" :initial-scale="2"></pdf-page>
+        <footer class='zoom-button'>
             <button @click="zoom(-.25)">-</button>
             <button @click="zoom(.25)">+</button>
         </footer>
@@ -96,6 +96,7 @@ export default {
 
 .pdf-header {
     display: flex;
+    position: relative;
     padding: .5rem 0;
     justify-content: space-around;
     background-color:rgba(0, 0, 0, .5);
@@ -109,6 +110,13 @@ export default {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     width: 25px;
     text-align: center;
+}
+
+.zoom-button {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    user-select: none;
 }
 
 </style>

@@ -1,9 +1,15 @@
 <template>
-  <canvas v-show="isCurrentPage" :style="canvasStyle" :width="canvasAttrs.width" :height="canvasAttrs.height" ref="canvas" class='pdf-page'></canvas>
+  <canvas v-show="isCurrentPage" 
+    :style="canvasStyle" 
+    :width="canvasAttrs.width" 
+    :height="canvasAttrs.height" 
+    ref="canvas" 
+    class='pdf-page'>
+  </canvas>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   props: {
@@ -20,7 +26,7 @@ export default {
   data() {
     return {
       scale: this.initialScale,
-      viewport: null,
+      viewport: this.page.getViewport(this.initialScale),
       renderTask: null,
       rendered: false,
     }
@@ -28,18 +34,19 @@ export default {
 
   computed: {
     actualSizeViewport() {
-      return this.viewport.clone({scale: this.scale });
+      return this.viewport.clone({ scale: this.initialScale });
     },
 
     canvasStyle() {
-      const { width: actualSizeWidth, height: actualSizeHeight } = this.actualSizeViewport;
-      const pixelRatio = window.devicePixelRatio || 1;
-      const [pixelWidth, pixelHeight] = [actualSizeWidth, actualSizeHeight].map(dim => Math.ceil(dim / pixelRatio));
-      return `width: ${pixelWidth}px; height: ${pixelHeight}px;`
+      const { width: documentWidth, height: documentHeight } = this.actualSizeViewport
+      // Set the width of the document display through the height of the container 
+      let pixelWidth = Math.ceil(((documentWidth *  this.pixelHeight) / documentHeight));
+      return `width: ${pixelWidth}px; height: ${this.pixelHeight}px;`
     },
 
     canvasAttrs() {
-      let {width, height} = this.viewport;
+
+      let {width, height} = this.page.getViewport(this.scale);
       [width, height] = [width, height].map(dim => Math.ceil(dim));
 
       const style = this.canvasStyle;
@@ -52,12 +59,17 @@ export default {
 
     isCurrentPage() {
       return this.$store.getters.isCurrentPage(this.page.pageNumber)
-    }
+    },
+
+    ...mapState({
+      pixelHeight: state => state.SlideModule.containerHeight
+    })
     
   },
 
   methods: {
     async renderPage() {
+      
       // Create our render params
       const renderParams = {
         canvasContext: this.$refs.canvas.getContext('2d'),
@@ -93,8 +105,10 @@ export default {
   created() {
     // PDFPageProxy#getViewport
     // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
-    this.viewport = this.page.getViewport(this.scale);
-
+    // this.viewport = this.page.getViewport(this.scale);
+    // Listen to zoom changes
+    // console.log(this.containerHeight)
+    // console.log(`The container height ${this.containerHeight}`)
     this.$root.$on('zoom-change', this.zoomChange)
   },
 
@@ -102,7 +116,6 @@ export default {
     await this.renderPage();
     // We've rendered the page 
   },
-
 
   // Destroy the page before we remove the component
   beforeDestroy() {

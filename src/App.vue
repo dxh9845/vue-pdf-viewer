@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <slide-container variant='dark' style='min-height: 50vh;'></slide-container>
+    <slide-container variant='light' style='min-height: 50vh;'></slide-container>
     <!-- <PDFData url='http://www.africau.edu/images/default/sample.pdf'></PDFData> -->
   </div>
 </template>

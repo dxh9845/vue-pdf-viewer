@@ -1,8 +1,9 @@
-import { UPLOAD_FILE, CHANGE_SLIDE, RETRIEVE_PAGES, RESIZE_CONTAINER, ZOOM_PDF, LOAD_PAGE } from './actions.type';
-import { SET_FILE_STATUS, SET_FILE, SET_PDF, SET_PAGE_PROMISES, SET_SLIDE_NUMBER, SET_RESOLVED_PAGE } from './mutations.type';
-import { SLIDE_NOT_LOADED, SLIDE_LOADING, SLIDE_LOADED, readFileToBuffer } from '@/services/pdf.utils';
+import { readFileToBuffer, SLIDE_LOADED, SLIDE_LOADING, SLIDE_NOT_LOADED } from '@/services/pdf.utils';
+import { CHANGE_SLIDE, LOAD_PAGE, RESIZE_CONTAINER, RETRIEVE_PAGES, UPLOAD_FILE, ZOOM_PDF } from './actions.type';
+import { SET_CONTAINER_HEIGHT, SET_FILE, SET_FILE_STATUS, SET_PAGE_PROMISES, SET_PDF, SET_RESOLVED_PAGE, SET_SLIDE_NUMBER } from './mutations.type';
 
 const state = {
+    containerHeight: 0,
     currentSlideIndex: 0,
     slideStatus: SLIDE_NOT_LOADED,
     file: null,
@@ -112,8 +113,8 @@ const actions = {
             commit(SET_SLIDE_NUMBER, potentialSlideIndex)
         }  
     },
-    [RESIZE_CONTAINER]({ dispatch }) {
-
+    [RESIZE_CONTAINER]({ commit }, containerHeight) {
+        commit(SET_CONTAINER_HEIGHT, containerHeight);
     },
     [ZOOM_PDF]({ dispatch }) {
 
@@ -149,6 +150,9 @@ const mutations = {
     [SET_SLIDE_NUMBER](state, slideNum) {
         // Increment or decrement based on change
         state.currentSlideIndex = slideNum;
+    },
+    [SET_CONTAINER_HEIGHT](state, containerHeight) {
+        state.containerHeight = containerHeight;
     }
 }
 
