@@ -38,18 +38,16 @@ export default {
     },
 
     canvasStyle() {
-      const { width: documentWidth, height: documentHeight } = this.actualSizeViewport
+      const { width: documentWidth, height: documentHeight } = this.actualSizeViewport;
       // Set the width of the document display through the height of the container 
       let pixelWidth = Math.ceil(((documentWidth *  this.pixelHeight) / documentHeight));
-      return `width: ${pixelWidth}px; height: ${this.pixelHeight}px;`
+      return `width: ${pixelWidth}px; height: ${this.pixelHeight}px;`;
     },
 
     canvasAttrs() {
 
       let {width, height} = this.page.getViewport(this.scale);
       [width, height] = [width, height].map(dim => Math.ceil(dim));
-
-      const style = this.canvasStyle;
 
       return {
         width,

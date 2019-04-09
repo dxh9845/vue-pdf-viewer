@@ -1,13 +1,11 @@
 <template>
   <div id="app">
     <slide-container variant='light' style='min-height: 50vh;'></slide-container>
-    <!-- <PDFData url='http://www.africau.edu/images/default/sample.pdf'></PDFData> -->
   </div>
 </template>
 
 <script>
 import SlideContainer from '@/components/SlideContainer.vue';
-// import PDFData from '@/components/PDFData.vue';
 
 export default {
   name: 'app',

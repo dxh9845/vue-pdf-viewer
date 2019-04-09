@@ -2,13 +2,13 @@
     <div class='pdf-viewer' v-if="showPdf">
         <header class='pdf-header'>
             <button @click="slideChange(-1)">
-                < Previous 
+                Previous 
             </button>
             <span>
                 Page <input disabled class='input-box' input='number' v-model="currentSlideNum" /> of <b>{{ numPages }}</b>
             </span>
             <button @click="slideChange(1)">
-                Next >
+                Next
             </button>
         </header>
         <pdf-page v-for="page in loadedPages" :page="page" :key="page.pageNumber" :initial-scale="2"></pdf-page>
@@ -23,7 +23,7 @@
 import { mapState, mapGetters } from 'vuex';
 import pdfPage from './PDFPage';
 
-import { CHANGE_SLIDE } from '@/store/actions.type';
+import { CHANGE_SLIDE } from '../store/actions.type';
 
 export default {
     name: 'pdf-wrapper',
@@ -46,10 +46,6 @@ export default {
         pdfPage
     },
     methods: {
-        textChange(ev) {
-            console.log(ev)
-            // let changeVal = ev.value
-        },
         /**
          * Dispatch the slide change action
          */

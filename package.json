@@ -1,10 +1,21 @@
 {
   "name": "slide-shower",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.2.0",
+  "homepage": "https://github.com/dxh9845/vue-pdf-viewer",
+  "bugs": {
+    "url": "https://github.com/dxh9845/vue-pdf-viewer/issues",
+    "email": "dxh9845@rit.edu"
+  },
+  "repository": "github:dxh9845/vue-pdf-viewer",
+  "main": "./src/components/SlideContainer.vue",
+  "files": [
+    "src",
+    "dist/*"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build-bundle": "vue-cli-service build --target lib  --name slide-container",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
