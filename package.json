@@ -1,5 +1,5 @@
 {
-  "name": "slide-shower",
+  "name": "slide-container",
   "version": "0.2.0",
   "homepage": "https://github.com/dxh9845/vue-pdf-viewer",
   "bugs": {
@@ -7,15 +7,20 @@
     "email": "dxh9845@rit.edu"
   },
   "repository": "github:dxh9845/vue-pdf-viewer",
-  "main": "./src/components/SlideContainer.vue",
+  "main": "dist/slide-container.umd.js",
+  "module": "dist/slide-container.esm.js",
+  "unpkg": "dist/slide-container.min.js",
+  "browser": {
+    "./sfc": "src/components/SlideContainer.vue"
+  },
   "files": [
-    "src",
+    "src/*",
     "dist/*"
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "build-bundle": "vue-cli-service build --target lib  --name slide-container",
+    "build-bundle": "vue-cli-service build ./src/index.js --target lib  --dest dist/ --modern",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -24,7 +29,8 @@
     "vue": "^2.6.6",
     "vue-draggable-resizable": "^2.0.0-rc1",
     "vue-functional-data-merge": "^2.0.7",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "worker-loader": "^2.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.5",

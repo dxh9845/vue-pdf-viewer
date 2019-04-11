@@ -8,14 +8,14 @@
 </template>
 
 <script>
-import pdfWrapper from './PDFWrapper';
-import uploadButton from './UploadButton'
-import resizeGrip from './ResizeGrip';
+import pdfWrapper from './PDFWrapper.vue';
+import uploadButton from './UploadButton.vue'
+import resizeGrip from './ResizeGrip.vue';
 
 import { RESIZE_CONTAINER } from '../store/actions.type';
 
 export default {
-    name: 'slide-viewer',
+    name: 'slide-container',
     props: {
         responsive: {
             type: Boolean,

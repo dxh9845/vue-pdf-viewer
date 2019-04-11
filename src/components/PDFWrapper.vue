@@ -21,7 +21,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import pdfPage from './PDFPage';
+import pdfPage from './PDFPage.vue';
 
 import { CHANGE_SLIDE } from '../store/actions.type';
 
