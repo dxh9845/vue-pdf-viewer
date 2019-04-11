@@ -1,7 +1,7 @@
 var pdfjsLib = require('pdfjs-dist/build/pdf.js');
 // var pdfWorker =  require('worker-loader!pdfjs-dist/build/pdf.worker.js');
 // pdfjsLib.GlobalWorkerOptions.workerPort = new pdfWorker();
-console.log(pdfjsLib)
+
 // console.log(pdfjsLib.PDFJS)
 // pdfjsLib.PDFJS.disableWorker = true;
 import ThemeMixin from './mixins/theme.mixin';
@@ -18,14 +18,11 @@ function install(Vue, { store }) {
         throw new Error('Vue-pdf-viewer requires a Vuex store to function.');
     }
 
-    
-
     // Register the PDF JS Library
     Vue.prototype.$pdfjsLib = pdfjsLib;
     // Register the PDF js library off the store
-    store.prototype.$pdfjsLib = pdfjsLib;
     // Add our modules
-    store.registerModule(slideModule);
+    store.registerModule('SlideModule', slideModule);
     
     // Register our theme mixin
     Vue.mixin(ThemeMixin);

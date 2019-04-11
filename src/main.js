@@ -3,7 +3,7 @@ import App from './App.vue'
 import store from './store'
 import PdfPlugin from './index';
 
-Vue.use(PdfPlugin);
+Vue.use(PdfPlugin, {store});
 
 Vue.config.productionTip = false
 

@@ -53,7 +53,7 @@ const actions = {
         try {
             // Convert the PDF to an array of type UInt8
             const typedArray = await readFileToBuffer(file);
-            const pdf = await this.$pdfjsLib.getDocument(typedArray);
+            const pdf = await this._vm.$pdfjsLib.getDocument(typedArray);
             // Set our PDF file
             commit(SET_PDF, pdf);
             // Get the pages of the PDF
