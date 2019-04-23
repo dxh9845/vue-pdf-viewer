@@ -3,6 +3,11 @@
     color: #FFF;
 }
 
+.high-contrast {
+    background-color: #000;
+    color: #FFF;
+}
+
 .dark .upload-button, .high-contrast .upload-button {
     border: 2px solid #FFF;
 }
@@ -16,7 +21,4 @@
     border: 2px solid #000;
 }
 
-.high-contrast {
-    background-color: #000;
-    color: #FFF;
-}
+

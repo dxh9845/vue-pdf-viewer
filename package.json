@@ -1,44 +1,51 @@
 {
-  "name": "slide-container",
-  "version": "0.4.1",
+  "name": "vue-pdf-slides",
+  "version": "0.1.0",
   "homepage": "https://github.com/dxh9845/vue-pdf-viewer",
   "bugs": {
     "url": "https://github.com/dxh9845/vue-pdf-viewer/issues",
     "email": "dxh9845@rit.edu"
   },
   "repository": "github:dxh9845/vue-pdf-viewer",
-  "main": "dist/slide-container.umd.js",
-  "module": "dist/slide-container.esm.js",
-  "unpkg": "dist/slide-container.min.js",
-  "browser": {
-    "./sfc": "src/components/SlideContainer.vue"
-  },
+  "main": "dist/vue-pdf-slides.common.js",
+  "module": "dist/vue-pdf-slides.esm.js",
+  "unpkg": "dist/vue-pdf-slides.min.js",
+  "style": "dist/vue-pdf-slides-.css",
   "files": [
     "src/*",
     "dist/*"
   ],
   "scripts": {
+    "clean": "rimraf dist/",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "build-bundle": "vue-cli-service build ./src/index.js --target lib  --dest dist/ --modern",
+    "build": "rollup -c",
+    "build-bundle": "vue-cli-service build ./src/index.js --target lib  --dest dist/ ",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@babel/runtime": "^7.4.3",
     "lodash": "^4.17.11",
     "pdfjs-dist": "^2.1.266",
     "vue": "^2.6.10",
     "vue-draggable-resizable": "^2.0.0-rc1",
     "vue-functional-data-merge": "^2.0.7",
-    "vuex": "^3.0.1",
-    "worker-loader": "^2.0.0"
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.4.3",
     "@vue/cli-plugin-babel": "^3.5.5",
     "@vue/cli-plugin-eslint": "^3.0.5",
     "@vue/cli-service": "^3.5.3",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.3",
+    "rollup": "^1.10.1",
+    "rollup-plugin-buble": "^0.19.6",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-uglify": "^6.0.2",
+    "rollup-plugin-vue2": "^0.8.0",
     "vue-template-compiler": "^2.6.10"
   }
 }
