@@ -1,23 +1,19 @@
 <template>
   <div id="app">
-    <slide-container variant='light' style='min-height: 50vh;'></slide-container>
+    <slide-container variant='dark' style='min-height: 50vh;'></slide-container>
   </div>
 </template>
 
 <script>
-import SlideContainer from '@/components/SlideContainer.vue';
-
 export default {
-  name: 'app',
-  components: {
-    // PDFData
-    SlideContainer
-  }
+  name: 'app'
 }
 </script>
 
 <style>
 #app {
+  display: flex;
+  justify-content: center;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 </style>

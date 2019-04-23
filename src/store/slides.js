@@ -1,8 +1,9 @@
 import { readFileToBuffer, SLIDE_LOADED, SLIDE_LOADING, SLIDE_NOT_LOADED } from '../services/pdf.utils';
-import { CHANGE_SLIDE, LOAD_PAGE, RESIZE_CONTAINER, RETRIEVE_PAGES, UPLOAD_FILE, ZOOM_PDF } from './actions.type';
-import { SET_CONTAINER_HEIGHT, SET_FILE, SET_FILE_STATUS, SET_PAGE_PROMISES, SET_PDF, SET_RESOLVED_PAGE, SET_SLIDE_NUMBER } from './mutations.type';
+import { CHANGE_SLIDE, LOAD_PAGE, RESIZE_CONTAINER, RETRIEVE_PAGES, UPLOAD_FILE, ZOOM_PDF, LOAD_PDFJS } from './actions.type';
+import { SET_CONTAINER_HEIGHT, SET_FILE, SET_FILE_STATUS, SET_PAGE_PROMISES, SET_PDF, SET_RESOLVED_PAGE, SET_SLIDE_NUMBER, SET_PDFJS_LIB } from './mutations.type';
 
 const state = {
+    pdfjsLib: null,
     containerHeight: 0,
     currentSlideIndex: 0,
     slideStatus: SLIDE_NOT_LOADED,
@@ -14,37 +15,52 @@ const state = {
 }
 
 const getters = {
+    /**
+     * Get whether a current page 
+     * @param {Object} state - The current state
+     * @returns {Function} - A function that returns a truthiness value whether a slide is the current slide or not.
+     */
     isCurrentPage(state) {
         // Based on PDF js index
         return num => (state.currentSlideIndex + 1 == num);
     },
+    /**
+     * Get a friendly text indication of the loading status
+     * @param {Object} state - The state  
+     */
     slideStatusText(state) {
         switch (state.slideStatus) {
             case SLIDE_LOADING:
-                return "Loading slides...";
+            return "Loading slides...";
             case SLIDE_LOADED:
-                return ""
+            return ""
             case SLIDE_NOT_LOADED:
             default:
-                return "Upload a slide to get started!";
+            return "Upload a slide to get started!";
         }
     },
     /**
-     * Filter by pages that have been explicitly loaded 
-     * @param {*} state 
-     */
+    * Filter by pages that have been explicitly loaded 
+    * @param {Object} state - The state 
+    */
     loadedPages: (state) => {
         return state.pdfPages.filter(page => page._loaded);
     }
 }
 
 const actions = {
+    async [LOAD_PDFJS]({ commit }, importPromise) {
+        const pdfjsLib = await importPromise;
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.1.266/lib/pdf.worker.js'
+        commit(SET_PDFJS_LIB, pdfjsLib);
+    },
+    
     /**
-     * Upload the file and convert it to a format readable by PDF.js
-     * @param {*} param0 
-     * @param {*} file 
-     */
-    async [UPLOAD_FILE]({ commit, dispatch }, file) {
+    * Upload the file and convert it to a format readable by PDF.js
+    * @param {*} param0 
+    * @param {*} file 
+    */
+    async [UPLOAD_FILE]({ state, commit, dispatch }, file) {
         // We've uploaded a file, now we need to process it
         // Set our status to loading and keep a copy of our file
         commit(SET_FILE_STATUS, SLIDE_LOADING);
@@ -53,12 +69,12 @@ const actions = {
         try {
             // Convert the PDF to an array of type UInt8
             const typedArray = await readFileToBuffer(file);
-            const pdf = await this._vm.$pdfjsLib.getDocument(typedArray);
+            const pdf = await state.pdfjsLib.getDocument(typedArray).promise;
             // Set our PDF file
             commit(SET_PDF, pdf);
             // Get the pages of the PDF
             await dispatch(RETRIEVE_PAGES, pdf)
-
+            
             // We've successfully uploaded the file and converted it
             commit(SET_FILE_STATUS, SLIDE_LOADED);
         } catch (error) {
@@ -66,10 +82,10 @@ const actions = {
         }
     },
     /**
-     * Retrieve the pages
-     * @param {*} param0 
-     * @param {*} pdf - the PDF object we've loaded 
-     */
+    * Retrieve the pages
+    * @param {*} param0 
+    * @param {*} pdf - the PDF object we've loaded 
+    */
     async [RETRIEVE_PAGES]({ commit, dispatch }, pdf) {
         try {
             // Make an array of promises to resolve as we go through the document
@@ -84,10 +100,10 @@ const actions = {
         }
     },
     /**
-     * Fetch our page from the page promises, or the cache if already loaded.
-     * @param {*} param0 
-     * @param {*} pageIndex 
-     */
+    * Fetch our page from the page promises, or the cache if already loaded.
+    * @param {*} param0 
+    * @param {*} pageIndex 
+    */
     async [LOAD_PAGE]({ commit, state }, pageIndex) {
         // Has this page been loaded already?
         if (state.pdfPages[pageIndex]._loaded == true) {
@@ -99,10 +115,10 @@ const actions = {
         }
     },
     /**
-     * Change the slide index, and load if it hasn't been loaded already
-     * @param {*} param0 
-     * @param {*} changeVal 
-     */
+    * Change the slide index, and load if it hasn't been loaded already
+    * @param {*} param0 
+    * @param {*} changeVal 
+    */
     async [CHANGE_SLIDE]({ commit, dispatch, state }, changeVal) {
         let potentialSlideIndex = state.currentSlideIndex + changeVal;
         // Only fire if the slide has been loaded and it's within bounds
@@ -117,11 +133,14 @@ const actions = {
         commit(SET_CONTAINER_HEIGHT, containerHeight);
     },
     [ZOOM_PDF]({ dispatch }) {
-
+        
     }
 } 
 
 const mutations = {
+    [SET_PDFJS_LIB](state, pdfjsLib) {
+        state.pdfjsLib = pdfjsLib;
+    },
     [SET_FILE_STATUS](state, status) {
         state.slideStatus = status;
     },

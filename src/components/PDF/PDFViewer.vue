@@ -1,5 +1,5 @@
 <template>
-    <div class='pdf-viewer' v-if="showPdf">
+    <div class='pdf-viewer'>
         <header class='pdf-header'>
             <button @click="slideChange(-1)">
                 Previous 
@@ -11,7 +11,9 @@
                 Next
             </button>
         </header>
-        <pdf-page v-for="page in loadedPages" :page="page" :key="page.pageNumber" :initial-scale="2"></pdf-page>
+        <PDFData>
+            <PDFDocument slot='document' slot-scope="{pages}" :pages='pages' />
+        </PDFData>
         <footer class='zoom-button'>
             <button @click="zoom(-.25)">-</button>
             <button @click="zoom(.25)">+</button>
@@ -21,29 +23,26 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import pdfPage from './PDFPage.vue';
+import PDFData from './PDFData.vue';
+import PDFDocument from './PDFDocument.vue';
 
-import { CHANGE_SLIDE } from '../store/actions.type';
+import { CHANGE_SLIDE } from '../../store/actions.type';
 
 export default {
-    name: 'pdf-wrapper',
-    data() { 
-        return {
-            tempNum: this.currentSlideNum
-        }
-    },
+    name: 'pdf-viewer',
     computed: {
         ...mapState({
             showPdf: state => state.SlideModule.slideStatus == 2,
             numPages: state => state.SlideModule.numPages,
             currentSlideNum: state => state.SlideModule.currentSlideIndex + 1
         }),
-        ...mapGetters([
-            'loadedPages'
-        ])
+        ...mapGetters({
+            pages: 'loadedPages'
+        })
     },
     components: {
-        pdfPage
+        PDFData,
+        PDFDocument
     },
     methods: {
         /**

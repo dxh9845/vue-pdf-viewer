@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
-import PdfPlugin from './index';
+import VuePDFSlides from './index';
 
-Vue.use(PdfPlugin, {store});
+Vue.use(VuePDFSlides, {store});
 
 Vue.config.productionTip = false
 

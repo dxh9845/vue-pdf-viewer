@@ -1,5 +1,5 @@
 <template>
-    <div class='upload-container' v-if="showUpload">
+    <div class='upload-container'>
         <label class='upload-button'>
             <input @change="onFileChange" accept=".pdf" type='file' name='file' />
             📁 Upload PDF
@@ -10,20 +10,21 @@
 </template>
 
 <script>
-import { UPLOAD_FILE } from '../store/actions.type';
-import { mapState, mapGetters } from 'vuex';
+import { UPLOAD_FILE } from '../../store/actions.type';
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'upload-button',
     computed: {
-        ...mapState({
-            showUpload: state => (state.SlideModule.slideStatus == 0),
-        }),
         ...mapGetters({
             infoText: 'slideStatusText'
         })
     },
     methods: {
+        /**
+         * Receive the file change and dispatch it to our store
+         * @param {}
+         */
         onFileChange(ev) {
             var files = ev.target.files || ev.dataTransfer.files;
             if (!files.length)

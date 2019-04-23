@@ -6,7 +6,7 @@
 
 <script>
 import _ from "lodash";
-import { RESIZE_CONTAINER } from '../store/actions.type';
+import { RESIZE_CONTAINER } from '../../store/actions.type';
 import { mapState } from 'vuex';
 
 export default {

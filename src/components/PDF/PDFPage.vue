@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       scale: this.initialScale,
-      viewport: this.page.getViewport(this.initialScale),
+      viewport: this.page.getViewport({ scale: this.initialScale }),
       renderTask: null,
       rendered: false,
     }
@@ -76,7 +76,7 @@ export default {
       }
       // PDFPageProxy#render
       // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
-      this.renderTask = this.page.render(renderParams);
+      this.renderTask = this.page.render(renderParams).promise;
       await this.renderTask;
       console.log(`Page rendered`);
     },
@@ -113,7 +113,6 @@ export default {
 
   async mounted() {
     await this.renderPage();
-    // We've rendered the page 
   },
 
   // Destroy the page before we remove the component

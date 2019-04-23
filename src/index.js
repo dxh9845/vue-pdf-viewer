@@ -1,15 +1,9 @@
-var pdfjsLib = require('pdfjs-dist/build/pdf.js');
-// var pdfWorker =  require('worker-loader!pdfjs-dist/build/pdf.worker.js');
-// pdfjsLib.GlobalWorkerOptions.workerPort = new pdfWorker();
-
-// console.log(pdfjsLib.PDFJS)
-// pdfjsLib.PDFJS.disableWorker = true;
 import ThemeMixin from './mixins/theme.mixin';
-import SlideContainer from './components/SlideContainer.vue';
-import slideModule from './store/slides.js';
+import SlideContainer from './components/PDF/SlideContainer.vue';
+import SlideModule from './store/slides.js';
 import ThemeCss from './slide-theme.css'
 
-export { SlideContainer, ThemeMixin };
+export { ThemeMixin, ThemeCss };
 
 function install(Vue, { store }) {
     if (install.installed) return;
@@ -18,17 +12,13 @@ function install(Vue, { store }) {
         throw new Error('Vue-pdf-viewer requires a Vuex store to function.');
     }
 
-    // Register the PDF JS Library
-    Vue.prototype.$pdfjsLib = pdfjsLib;
-    // Register the PDF js library off the store
-    // Add our modules
-    store.registerModule('SlideModule', slideModule);
-    
     // Register our theme mixin
     Vue.mixin(ThemeMixin);
+    // Add our modules
+    store.registerModule('SlideModule', SlideModule);
     // Register our component
-    Vue.component('SlideContainer', SlideContainer)
-
+    Vue.component('SlideContainer', SlideContainer);
+    
     install.installed = true;
 }
 

@@ -1,6 +1,16 @@
-# slide-shower
+# vue-pdf-slides
 
-Inspired by [Ross Kaffenberger's repo](https://github.com/rossta/vue-pdfjs-demo)
+PDF viewer, inspired by [Ross Kaffenberger's repo](https://github.com/rossta/vue-pdfjs-demo)
+
+## Usage
+
+```
+// Use with your Vue store
+import store from './store' 
+import PDFSlides from 'vue-pdf-slides'
+
+Vue.use(PDFSlides, { store });
+```
 
 ## Project setup
 ```
