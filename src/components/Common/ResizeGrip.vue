@@ -33,15 +33,14 @@ export default {
         moveGrip(ev) {
             if (this.dragging) {
                 const deltaY = ev.pageY - this.lastY;
-                this.$store.dispatch(RESIZE_CONTAINER, this.containerHeight + deltaY);
+                this.$store.dispatch(RESIZE_CONTAINER, { clientHeight: this.containerHeight + deltaY, clientWidth: null } );
                 this.lastY = ev.pageY;
             }
         }
     },
     mounted() {
         window.addEventListener('mouseup', this.endDrag);
-        this.debouncedMove = _.throttle(this.moveGrip, 100, {
-        })
+        this.debouncedMove = _.throttle(this.moveGrip, 100, {})
         window.addEventListener('mousemove', this.debouncedMove)
     }
 }

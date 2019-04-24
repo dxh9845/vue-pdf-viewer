@@ -87,6 +87,9 @@ export default {
 <style>
 .pdf-viewer {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
 }
 
 .pdf-header {

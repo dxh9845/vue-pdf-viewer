@@ -1,5 +1,6 @@
 <template>
-  <canvas v-show="isCurrentPage" 
+  <canvas 
+    v-show="isCurrentPage" 
     :style="canvasStyle" 
     :width="canvasAttrs.width" 
     :height="canvasAttrs.height" 
@@ -29,7 +30,6 @@ export default {
       scale: this.initialScale,
       viewport: this.page.getViewport({ scale: this.initialScale }),
       renderTask: null,
-      rendered: false,
     }
   },
 
@@ -40,9 +40,20 @@ export default {
 
     canvasStyle() {
       const { width: documentWidth, height: documentHeight } = this.actualSizeViewport;
-      // Set the width of the document display through the height of the container 
-      let pixelWidth = Math.ceil(((documentWidth *  this.pixelHeight) / documentHeight));
-      return `width: ${pixelWidth}px; height: ${this.pixelHeight}px;`;
+      // console.log(`Pixel width: ${this.pixelWidth}; Height: ${this.pixelHeight}`)
+      const { pixelWidth, pixelHeight } = this;
+
+      if (pixelWidth > pixelHeight) {
+        let ph = Math.ceil(( (documentHeight * pixelWidth) / documentWidth ));
+        return `width: ${pixelWidth}px; height: ${ph}px;`
+      }
+      // } else if (pixelHeight > pixelWidth ) {
+      //   // Set the width of the document display through the height of the container 
+      //   let pw = Math.ceil(((documentWidth *  this.pixelHeight) / documentHeight));
+      //   return `width: ${pw}px; height: ${this.pixelHeight}px;`;
+      // }
+      
+      return `width: ${pixelWidth}; height: ${pixelHeight}px;`
     },
 
     canvasAttrs() {
@@ -61,7 +72,8 @@ export default {
     },
 
     ...mapState({
-      pixelHeight: state => state.SlideModule.containerHeight
+      pixelHeight: state => state.SlideModule.containerHeight,
+      pixelWidth: state => state.SlideModule.containerWidth
     })
     
   },
@@ -105,9 +117,8 @@ export default {
     // PDFPageProxy#getViewport
     // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
     // this.viewport = this.page.getViewport(this.scale);
+
     // Listen to zoom changes
-    // console.log(this.containerHeight)
-    // console.log(`The container height ${this.containerHeight}`)
     this.$root.$on('zoom-change', this.zoomChange)
   },
 

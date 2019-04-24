@@ -11,6 +11,7 @@
 <script>
 import { UploadButton, LoadingSpinner, ResizeGrip } from '../Common/index.js';
 import PDFViewer from './PDFViewer.vue';
+import _ from 'lodash';
 
 import { mapState } from 'vuex';
 import { SLIDE_NOT_LOADED, SLIDE_LOADING, SLIDE_LOADED } from '../../services/pdf.utils.js'; 
@@ -30,8 +31,16 @@ export default {
         UploadButton,
         ResizeGrip
     },
+    methods: {
+        dispatchContainerSize() {
+            const { clientWidth, clientHeight } = this.$el;
+            this.$store.dispatch(RESIZE_CONTAINER, { clientHeight, clientWidth });
+        }
+    },
     mounted() {
-        this.$store.dispatch(RESIZE_CONTAINER, this.$el.clientHeight);
+        this.dispatchContainerSize();
+        this.debouncedResize = _.throttle(this.dispatchContainerSize, 100, {});
+        window.addEventListener('resize', this.debouncedResize)
     },
     computed: {
         ...mapState({
@@ -39,6 +48,9 @@ export default {
             showLoading: state => (state.SlideModule.slideStatus === SLIDE_LOADING),
             showPDF: state => (state.SlideModule.slideStatus === SLIDE_LOADED),
         }),
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.debouncedResize)
     }
 
 }
