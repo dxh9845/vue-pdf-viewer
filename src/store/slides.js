@@ -1,6 +1,7 @@
 import { readFileToBuffer, SLIDE_LOADED, SLIDE_LOADING, SLIDE_NOT_LOADED } from '../services/pdf.utils';
-import { CHANGE_SLIDE, LOAD_PAGE, RESIZE_CONTAINER, RETRIEVE_PAGES, UPLOAD_FILE, ZOOM_PDF, LOAD_PDFJS } from './actions.type';
-import { SET_CONTAINER_HEIGHT, SET_FILE, SET_FILE_STATUS, SET_PAGE_PROMISES, SET_PDF, SET_RESOLVED_PAGE, SET_SLIDE_NUMBER, SET_PDFJS_LIB } from './mutations.type';
+import { CHANGE_SLIDE, LOAD_PAGE, RESIZE_CONTAINER, RETRIEVE_PAGES, UPLOAD_FILE, ZOOM_PDF, LOAD_PDFJS, RETRIEVE_PAGE_TEXT, UPDATE_CONTEXT } from './actions.type';
+import { SET_CONTAINER_HEIGHT, SET_FILE, SET_FILE_STATUS, SET_PAGE_PROMISES, SET_PDF, SET_RESOLVED_PAGE, SET_SLIDE_NUMBER, SET_PDFJS_LIB, SET_PAGE_WORDLIST } from './mutations.type';
+import store from '../../../hannibal-lecture/src/store'
 
 const state = {
     pdfjsLib: null,
@@ -12,6 +13,7 @@ const state = {
     pdfPages: [],
     pdfPagePromises: [],
     numPages: null,
+    pdfPageWords: [],
 }
 
 const getters = {
@@ -104,15 +106,33 @@ const actions = {
     * @param {*} param0 
     * @param {*} pageIndex 
     */
-    async [LOAD_PAGE]({ commit, state }, pageIndex) {
+    async [LOAD_PAGE]({ commit, dispatch, state }, pageIndex) {
         // Has this page been loaded already?
-        if (state.pdfPages[pageIndex]._loaded == true) {
-            return 
-        } else {
+        if (!state.pdfPages[pageIndex]._loaded) {
             // Load the PDF (calling pdf.getPage under the hood)
             let resolvedPdf = await state.pdfPagePromises[pageIndex];
+            await dispatch(RETRIEVE_PAGE_TEXT, { resolvedPdf, pageIndex });
             commit(SET_RESOLVED_PAGE, { resolvedPdf, pageIndex });
         }
+        dispatch(UPDATE_CONTEXT, state.pdfPageWords[pageIndex])
+    },
+    /**
+     * Retrieve text content from PDF page.
+     * @param {*} param0 
+     * @
+     * @param {*} pageIndex 
+     */
+    async [RETRIEVE_PAGE_TEXT]({ commit }, { resolvedPdf, pageIndex }) {
+        let pageText = await resolvedPdf.getTextContent({normalizeWhitespace: true});
+        let pageWordSet = new Set();
+        for (let item of pageText.items) {
+            // Filter out non-word characters
+            let words = item.str.match(/([a-z]+[-|'|’][a-z]+)|[a-z]+/ig);
+            if (words) {
+                words.forEach(word => pageWordSet.add(word));
+            }
+        }
+        commit(SET_PAGE_WORDLIST, { pageWordSet, pageIndex });
     },
     /**
     * Change the slide index, and load if it hasn't been loaded already
@@ -172,6 +192,9 @@ const mutations = {
     },
     [SET_CONTAINER_HEIGHT](state, containerHeight) {
         state.containerHeight = containerHeight;
+    },
+    [SET_PAGE_WORDLIST](state, { pageWordSet, pageIndex }) {
+        state.pdfPageWords[pageIndex] = Array.from(pageWordSet);
     }
 }
 

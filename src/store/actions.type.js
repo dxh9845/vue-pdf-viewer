@@ -5,3 +5,5 @@ export const LOAD_PAGE = 'LOAD_PAGE';
 export const RETRIEVE_PAGES = 'RETRIEVE_PAGES';
 export const RESIZE_CONTAINER = 'RESIZE_CONTAINER';
 export const ZOOM_PDF = 'ZOOM_PDF';
+export const RETRIEVE_PAGE_TEXT = 'RETRIEVE_PAGE_TEXT';
+export const UPDATE_CONTEXT = 'UPDATE_CONTEXT';
