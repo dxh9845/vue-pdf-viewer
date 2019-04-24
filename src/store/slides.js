@@ -1,6 +1,6 @@
 import { readFileToBuffer, SLIDE_LOADED, SLIDE_LOADING, SLIDE_NOT_LOADED } from '../services/pdf.utils';
 import { CHANGE_SLIDE, LOAD_PAGE, RESIZE_CONTAINER, RETRIEVE_PAGES, UPLOAD_FILE, ZOOM_PDF, LOAD_PDFJS, RETRIEVE_PAGE_TEXT, UPDATE_CONTEXT } from './actions.type';
-import { SET_CONTAINER_HEIGHT, SET_FILE, SET_FILE_STATUS, SET_PAGE_PROMISES, SET_PDF, SET_RESOLVED_PAGE, SET_SLIDE_NUMBER, SET_PDFJS_LIB, SET_PAGE_WORDLIST } from './mutations.type';
+import { SET_CONTAINER_SIZE, SET_FILE, SET_FILE_STATUS, SET_PAGE_PROMISES, SET_PDF, SET_RESOLVED_PAGE, SET_SLIDE_NUMBER, SET_PDFJS_LIB, SET_PAGE_WORDLIST } from './mutations.type';
 const state = {
     pdfjsLib: null,
     containerHeight: 0,
@@ -189,19 +189,14 @@ const mutations = {
         // Increment or decrement based on change
         state.currentSlideIndex = slideNum;
     },
-<<<<<<< HEAD
-    [SET_CONTAINER_HEIGHT](state, containerHeight) {
-        state.containerHeight = containerHeight;
-    },
     [SET_PAGE_WORDLIST](state, { pageWordSet, pageIndex }) {
         state.pdfPageWords[pageIndex] = Array.from(pageWordSet);
-=======
+    },
     [SET_CONTAINER_SIZE](state, { clientHeight, clientWidth }) {
         state.containerHeight = clientHeight;
         if (clientWidth) {
             state.containerWidth = clientWidth;
         }
->>>>>>> Fixed resize issue. Added container width to slide module
     }
 }
 
