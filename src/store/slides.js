@@ -122,13 +122,14 @@ const actions = {
      * @param {*} pageIndex 
      */
     async [RETRIEVE_PAGE_TEXT]({ commit }, { resolvedPdf, pageIndex }) {
-        let pageText = await resolvedPdf.getTextContent({normalizeWhitespace: true});
+        let pageText = await resolvedPdf.getTextContent({ normalizeWhitespace: true });
         let pageWordSet = new Set();
         for (let item of pageText.items) {
             // Filter out non-word characters
             let words = item.str.match(/([a-z]+[-|'|’][a-z]+)|[a-z]+/ig);
             if (words) {
-                words.forEach(word => pageWordSet.add(word));
+                let filterWords = words.filter( w => w.length > 5 );
+                pageWordSet.add(...filterWords);
             }
         }
         commit(SET_PAGE_WORDLIST, { pageWordSet, pageIndex });
