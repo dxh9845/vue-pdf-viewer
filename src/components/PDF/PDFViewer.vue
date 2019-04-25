@@ -89,7 +89,7 @@ export default {
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .pdf-header {

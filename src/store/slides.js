@@ -127,9 +127,13 @@ const actions = {
         for (let item of pageText.items) {
             // Filter out non-word characters
             let words = item.str.match(/([a-z]+[-|'|’][a-z]+)|[a-z]+/ig);
-            if (words) {
+            if (words && words.length > 0) {
                 let filterWords = words.filter( w => w.length > 5 );
-                pageWordSet.add(...filterWords);
+
+                filterWords.forEach(element => {
+                    pageWordSet.add(element)
+                });
+
             }
         }
         commit(SET_PAGE_WORDLIST, { pageWordSet, pageIndex });
