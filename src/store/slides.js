@@ -128,7 +128,7 @@ const actions = {
             // Filter out non-word characters
             let words = item.str.match(/([a-z]+[-|'|’][a-z]+)|[a-z]+/ig);
             if (words && words.length > 0) {
-                let filterWords = words.filter( w => w.length > 5 );
+                let filterWords = words.filter( w => w.length > 3 );
 
                 filterWords.forEach(element => {
                     pageWordSet.add(element)
